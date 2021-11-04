@@ -16,42 +16,23 @@ module GunAccessorySupply
       items = []
 
       File.open(tempfile).each_with_index do |row, i|
-        row = row.split("\t")
+        row = parse_row(row)
         
         if i==0
           @headers = row
           next
         end
 
-        if row[@headers.index('Category1')].try(:strip) == 'Guns'
-          # Guns
-          case row[@headers.index('Category2')].try(:strip)
-          when 'Long Guns'
-            @category    = row[@headers.index('Category3')].try(:strip)
-            @subcategory = row[@headers.index("Category4")].try(:strip)
-          when 'Handguns'
-            @category    = row[@headers.index('Category2')].try(:strip)
-            @subcategory = row[@headers.index("Category3")].try(:strip)
-          end
-        else
-          # Everything else
-          @category    = row[@headers.index('Category1')].try(:strip)
-          @subcategory = row[@headers.index('Category2')].try(:strip)
-        end
-
         item = {
           mfg_number:      row[@headers.index('Item ID')].try(:strip),
-          upc:             row[@headers.index('Bar Code')].try(:strip),
-          name:            row[@headers.index('Description')].try(:strip),
-          quantity:        row[@headers.index('Qty available')].to_i,
-          price:           row[@headers.index('Price')].try(:strip),
-          brand:           row[@headers.index('Brand')].try(:strip),
-          item_identifier: row[@headers.index("Item ID")].try(:strip),
-          category:        @category,
-          subcategory:     @subcategory,
-          features:        {
-                             image_name: row[@headers.index("ImageFileName\n")].try(:strip),
-                           },
+          upc:             row[@headers.index('UPC')].try(:strip),
+          name:            row[@headers.index('Item Description')].try(:strip),
+          quantity:        row[@headers.index("Available Qty")].to_i,
+          price:           row[@headers.index('MSRP')].try(:strip), # FIXME: Ensure this is the correct value
+          brand:           row[@headers.index('Manufacturer')].try(:strip),
+          item_identifier: row[@headers.index("Image Link")].try(:strip),
+          category:        row[@headers.index('Category')].try(:strip),
+          subcategory:     row[@headers.index('Category')].try(:strip), # FIXME: Need a sub-cat
         }
 
         items << item
@@ -61,6 +42,12 @@ module GunAccessorySupply
       tempfile.unlink
 
       items
+    end
+
+    private
+
+    def parse_row(row)
+      row.gsub('"','').gsub("\r\n", '').encode('UTF-8', invalid: :replace).split(",")
     end
 
   end

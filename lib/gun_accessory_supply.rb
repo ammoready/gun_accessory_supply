@@ -41,7 +41,7 @@ module GunAccessorySupply
     def initialize
       @debug_mode              ||= false
       @ftp_host                ||= "50.233.131.250"
-      @ftp_port                ||= "22"
+      @ftp_port                ||= "2222"
       @top_level_dir           ||= "/out"
       @catalog_filename_prefix ||= 'InventoryInformation_AmmoReady__'
     end
