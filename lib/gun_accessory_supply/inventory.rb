@@ -21,7 +21,7 @@ module GunAccessorySupply
       items = []
 
       File.open(tempfile).each_with_index do |row, i|
-        row = row.split("\t")
+        row = parse_row(row)
         
         if i==0
           @headers = row
@@ -30,8 +30,8 @@ module GunAccessorySupply
 
         item = {
           item_identifier: row[@headers.index('Item ID')].strip,
-          quantity:        row[@headers.index('Qty available')].to_i,
-          price:           row[@headers.index('Price')].strip,
+          quantity:        row[@headers.index('Available Qty')].to_i,
+          price:           row[@headers.index('MSRP')].strip,
         }
 
         items << item
@@ -48,7 +48,7 @@ module GunAccessorySupply
       items = []
 
       File.open(tempfile).each_with_index do |row, i|
-        row = row.split("\t")
+        row = parse_row(row)
         
         if i==0
           @headers = row
@@ -57,7 +57,7 @@ module GunAccessorySupply
 
         item = {
           item_identifier: row[@headers.index('Item ID')].strip,
-          quantity:        row[@headers.index('Qty available')].to_i,
+          quantity:        row[@headers.index('Available Qty')].to_i,
         }
 
         items << item

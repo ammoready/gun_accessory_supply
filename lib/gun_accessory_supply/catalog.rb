@@ -44,11 +44,5 @@ module GunAccessorySupply
       items
     end
 
-    private
-
-    def parse_row(row)
-      row.gsub('"','').gsub("\r\n", '').encode('UTF-8', invalid: :replace).split(",")
-    end
-
   end
 end
