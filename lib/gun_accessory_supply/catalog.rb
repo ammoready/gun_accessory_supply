@@ -34,12 +34,13 @@ module GunAccessorySupply
           msrp:            row[@headers.index('MSRP')].try(:strip),
           map_price:       row[@headers.index('MAP Price')].try(:strip),
           brand:           row[@headers.index('Manufacturer')].try(:strip),
-          item_identifier: row[@headers.index("Image Link")].try(:strip),
+          item_identifier: row[@headers.index("Item ID")].try(:strip),
           category:        cleaned_category(category)[0],
           subcategory:     cleaned_category(category)[1],
           weight:          row[@headers.index('Shipping Weight')].try(:strip),
           features: {
             caliber:       row[@headers.index('Caliber')].try(:strip),
+            image_name:    row[@headers.index("Image Link")].try(:strip),
           }
         }
 
