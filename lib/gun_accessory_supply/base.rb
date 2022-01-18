@@ -75,5 +75,16 @@ module GunAccessorySupply
     def parse_row(row)
       row.gsub('"','').gsub("\r\n", '').encode('UTF-8', invalid: :replace).split(",")
     end
+
+    def write_file(path, data)
+      connect(@options) do |sftp|
+        begin
+          sftp.file.open(path, "w") do |f|
+            f.puts data
+          end
+        end
+      end
+    end
+
   end
 end
