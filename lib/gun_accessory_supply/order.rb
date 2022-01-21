@@ -63,75 +63,77 @@ module GunAccessorySupply
 
       xml = Builder::XmlMarkup.new(target: output, indent: 2)
 
-      xml.instruct!(:xml, timestamp: Time.now)
+      xml.instruct!(:xml)
 
-      xml.Header do
-        xml.From do
-          xml.Credential(domain: @options[:cxml_domain]) do
-            xml.Identity @options[:cxml_domain]
-            xml.SharedSecret @options[:cxml_secret]
-            xml.OrderID @po_number
+      xml.cXML(timestamp: Time.now) do
+        xml.Header do
+          xml.From do
+            xml.Credential(domain: @options[:cxml_domain]) do
+              xml.Identity @options[:cxml_domain]
+              xml.SharedSecret @options[:cxml_secret]
+              xml.OrderID @po_number
+            end
+          end
+          xml.To do
+            xml.Credential(domain: @options[:cxml_domain]) do
+              xml.Identity @options[:cxml_domain]
+              xml.SharedSecret @options[:cxml_secret]
+              xml.OrderID @po_number
+            end
+          end
+          xml.Sender do
+            xml.Credential(domain: @options[:cxml_domain]) do
+              xml.Identity @options[:cxml_domain]
+              xml.SharedSecret @options[:cxml_secret]
+              xml.OrderID @po_number
+            end
           end
         end
-        xml.To do
-          xml.Credential(domain: @options[:cxml_domain]) do
-            xml.Identity @options[:cxml_domain]
-            xml.SharedSecret @options[:cxml_secret]
-            xml.OrderID @po_number
-          end
-        end
-        xml.Sender do
-          xml.Credential(domain: @options[:cxml_domain]) do
-            xml.Identity @options[:cxml_domain]
-            xml.SharedSecret @options[:cxml_secret]
-            xml.OrderID @po_number
-          end
-        end
-      end
 
-      xml.Request do
-        xml.OrderRequest do
-          xml.OrderRequestHeader(:orderDate => Time.now, :type => 'new') do
-            xml.ShipTo do
-              xml.Address do
-                xml.Name @recipient[:dealer_name]
-                xml.Email @recipient[:shipping][:email]
-                xml.PostalAddress do
-                  xml.DeliverTo @recipient[:shipping][:name]
-                  xml.Street @recipient[:shipping][:address]
-                  xml.City @recipient[:shipping][:city]
-                  xml.State @recipient[:shipping][:state]
-                  xml.PostalCode @recipient[:shipping][:zip]
-                  xml.Country "US"
+        xml.Request do
+          xml.OrderRequest do
+            xml.OrderRequestHeader(:orderDate => Time.now, :type => 'new') do
+              xml.ShipTo do
+                xml.Address do
+                  xml.Name @recipient[:dealer_name]
+                  xml.Email @recipient[:shipping][:email]
+                  xml.PostalAddress do
+                    xml.DeliverTo @recipient[:shipping][:name]
+                    xml.Street @recipient[:shipping][:address]
+                    xml.City @recipient[:shipping][:city]
+                    xml.State @recipient[:shipping][:state]
+                    xml.PostalCode @recipient[:shipping][:zip]
+                    xml.Country "US"
+                  end
+                end
+              end
+              xml.BillTo do
+                xml.Address do
+                  xml.Name @recipient[:dealer_name]
+                  xml.Email @recipient[:shipping][:email]
+                  xml.PostalAddress do
+                    xml.DeliverTo @recipient[:shipping][:name]
+                    xml.Street @recipient[:shipping][:address]
+                    xml.City @recipient[:shipping][:city]
+                    xml.State @recipient[:shipping][:state]
+                    xml.PostalCode @recipient[:shipping][:zip]
+                    xml.Country "US"
+                  end
                 end
               end
             end
-            xml.BillTo do
-              xml.Address do
-                xml.Name @recipient[:dealer_name]
-                xml.Email @recipient[:shipping][:email]
-                xml.PostalAddress do
-                  xml.DeliverTo @recipient[:shipping][:name]
-                  xml.Street @recipient[:shipping][:address]
-                  xml.City @recipient[:shipping][:city]
-                  xml.State @recipient[:shipping][:state]
-                  xml.PostalCode @recipient[:shipping][:zip]
-                  xml.Country "US"
-                end
-              end
-            end
-          end
 
-          @items.each do |item|
-            xml.ItemOut(quantity: item[:qty]) do
-              xml.ItemID do
-                xml.SupplierPartID item[:identifier]
-              end
-              xml.ItemDetail do
-                xml.UnitPrice do
-                  xml.Money item[:price]
+            @items.each do |item|
+              xml.ItemOut(quantity: item[:qty]) do
+                xml.ItemID do
+                  xml.SupplierPartID item[:identifier]
                 end
-                xml.Description item[:upc]
+                xml.ItemDetail do
+                  xml.UnitPrice do
+                    xml.Money item[:price]
+                  end
+                  xml.Description item[:upc]
+                end
               end
             end
           end
