@@ -10,7 +10,7 @@ module GunAccessorySupply
 
     # @option options [String] :username *required*
     def initialize(options={})
-      requires!(options, :username, :password, :po_number)
+      requires!(options, :username, :password, :po_number, :cxml_domain, :cxml_secret)
 
       @dealer_number = options[:username]
       @po_number     = options[:po_number]
@@ -63,7 +63,31 @@ module GunAccessorySupply
 
       xml = Builder::XmlMarkup.new(target: output, indent: 2)
 
-      xml.instruct!(:xml)
+      xml.instruct!(:xml, timestamp: Time.now)
+
+      xml.Header do
+        xml.From do
+          xml.Credential(domain: @options[:cxml_domain]) do
+            xml.Identity @options[:cxml_domain]
+            xml.SharedSecret @options[:cxml_secret]
+            xml.OrderID @po_number
+          end
+        end
+        xml.To do
+          xml.Credential(domain: @options[:cxml_domain]) do
+            xml.Identity @options[:cxml_domain]
+            xml.SharedSecret @options[:cxml_secret]
+            xml.OrderID @po_number
+          end
+        end
+        xml.Sender do
+          xml.Credential(domain: @options[:cxml_domain]) do
+            xml.Identity @options[:cxml_domain]
+            xml.SharedSecret @options[:cxml_secret]
+            xml.OrderID @po_number
+          end
+        end
+      end
 
       xml.Request do
         xml.OrderRequest do
