@@ -1,26 +1,16 @@
 module GunAccessorySupply
   class User < Base
 
-    USER_DIR             = '/ammoready'
-    USER_FILENAME_PREFIX = ''
+    STANDARD_CUSTOMER_NUMBER_LENGTH = 6.freeze
 
     def initialize(options = {})
-      requires!(options, :username, :password, :account_id)
-      @options = options
+      requires!(options, :username, :password)
+
+      @customer_number = options[:username]
     end
 
     def authenticated?
-      tempfile = get_most_recent_file(USER_FILENAME_PREFIX, USER_DIR)
-
-      File.open(tempfile).each_with_index do |row, i|
-        row = row.split("\t")
-
-        return true if row[0].strip.downcase == @options[:account_id].strip.downcase
-      end
-
-      false
-    rescue GunAccessorySupply::NotAuthenticated
-      false
+      @customer_number.length == STANDARD_CUSTOMER_NUMBER_LENGTH && @customer_number[0].to_i == 1
     end
 
   end
