@@ -9,13 +9,12 @@ module GunAccessorySupply
   class Order < Base
 
     # @option options [String] :username *required*
-    def initialize(options={})
+    def initialize(options = {})
       requires!(options, :username, :password, :po_number, :cxml_domain, :cxml_secret)
 
-      @dealer_number = options[:username]
-      @po_number     = options[:po_number]
-      @items         = []
-      @options       = options
+      @po_number = options[:po_number]
+      @items     = []
+      @options   = options
     end
 
     # @param header [Hash]
@@ -30,7 +29,7 @@ module GunAccessorySupply
     #     * :email [String] *required*
     #     * :phone [String] *required*
     #   * :special_instructions [String] optional
-    def add_recipient(hash={})
+    def add_recipient(hash = {})
       requires!(hash, :dealer_name, :shipping)
       requires!(hash[:shipping], :name, :address, :city, :state, :zip, :email, :phone)
 
@@ -43,7 +42,7 @@ module GunAccessorySupply
     #   * :upc [String] *required*
     #   * :qty [Integer] *required*
     #   * :price [String]
-    def add_item(item={})
+    def add_item(item = {})
       requires!(item, :identifier, :upc, :qty)
       @items << item
     end
@@ -92,7 +91,7 @@ module GunAccessorySupply
 
         xml.Request do
           xml.OrderRequest do
-            xml.OrderRequestHeader(:orderDate => Time.now, :type => 'new') do
+            xml.OrderRequestHeader(orderDate: Time.now, type: 'new') do
               xml.ShipTo do
                 xml.Address do
                   xml.Name @recipient[:dealer_name]
@@ -108,7 +107,7 @@ module GunAccessorySupply
                 end
               end
               xml.BillTo do
-                xml.Address do
+                xml.Address(addressID: @options[:password]) do
                   xml.Name @recipient[:dealer_name]
                   xml.Email @recipient[:shipping][:email]
                   xml.PostalAddress do
