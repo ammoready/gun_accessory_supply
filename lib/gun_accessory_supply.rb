@@ -37,6 +37,8 @@ module GunAccessorySupply
     attr_accessor :ftp_port
     attr_accessor :top_level_dir
     attr_accessor :catalog_filename_prefix
+    attr_accessor :xml_domain
+    attr_accessor :xml_secret
 
     def initialize
       @debug_mode    ||= false

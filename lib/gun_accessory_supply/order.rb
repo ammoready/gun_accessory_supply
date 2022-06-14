@@ -10,7 +10,7 @@ module GunAccessorySupply
 
     # @option options [String] :username *required*
     def initialize(options = {})
-      requires!(options, :username, :password, :po_number, :cxml_domain, :cxml_secret)
+      requires!(options, :username, :password, :po_number)
 
       @po_number = options[:po_number]
       @items     = []
@@ -67,23 +67,23 @@ module GunAccessorySupply
       xml.cXML(timestamp: Time.now) do
         xml.Header do
           xml.From do
-            xml.Credential(domain: @options[:cxml_domain]) do
-              xml.Identity @options[:cxml_domain]
-              xml.SharedSecret @options[:cxml_secret]
+            xml.Credential(domain: @xml_domain) do
+              xml.Identity @xml_domain
+              xml.SharedSecret @xml_secret
               xml.OrderID @po_number
             end
           end
           xml.To do
-            xml.Credential(domain: @options[:cxml_domain]) do
-              xml.Identity @options[:cxml_domain]
-              xml.SharedSecret @options[:cxml_secret]
+            xml.Credential(domain: @xml_domain) do
+              xml.Identity @xml_domain
+              xml.SharedSecret @xml_secret
               xml.OrderID @po_number
             end
           end
           xml.Sender do
-            xml.Credential(domain: @options[:cxml_domain]) do
-              xml.Identity @options[:cxml_domain]
-              xml.SharedSecret @options[:cxml_secret]
+            xml.Credential(domain: @xml_domain) do
+              xml.Identity @xml_domain
+              xml.SharedSecret @xml_secret
               xml.OrderID @po_number
             end
           end
