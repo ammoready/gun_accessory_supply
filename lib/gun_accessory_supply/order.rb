@@ -10,11 +10,12 @@ module GunAccessorySupply
 
     # @option options [String] :username *required*
     def initialize(options = {})
-      requires!(options, :username, :password, :po_number)
+      requires!(options, :username, :password, :po_number, :ship_to_id)
 
-      @po_number = options[:po_number]
-      @items     = []
-      @options   = options
+      @po_number  = options[:po_number]
+      @ship_to_id = options[:ship_to_id]
+      @items      = []
+      @options    = options
     end
 
     # @param header [Hash]
@@ -107,7 +108,7 @@ module GunAccessorySupply
                 end
               end
               xml.BillTo do
-                xml.Address(addressID: @options[:password]) do
+                xml.Address(addressID: @ship_to_id) do
                   xml.Name @recipient[:dealer_name]
                   xml.Email @recipient[:shipping][:email]
                   xml.PostalAddress do
