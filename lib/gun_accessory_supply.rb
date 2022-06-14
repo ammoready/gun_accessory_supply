@@ -39,11 +39,10 @@ module GunAccessorySupply
     attr_accessor :catalog_filename_prefix
 
     def initialize
-      @debug_mode              ||= false
-      @ftp_host                ||= "50.233.131.250"
-      @ftp_port                ||= "2222"
-      @top_level_dir           ||= "/out"
-      @catalog_filename_prefix ||= 'InventoryInformation_AmmoReady__'
+      @debug_mode    ||= false
+      @ftp_host      ||= "50.233.131.250"
+      @ftp_port      ||= "2222"
+      @top_level_dir ||= "/out"
     end
   end
 end
