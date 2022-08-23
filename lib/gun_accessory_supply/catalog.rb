@@ -30,7 +30,7 @@ module GunAccessorySupply
           upc:             row[@headers.index('UPC')].try(:strip),
           name:            row[@headers.index('Item Description')].try(:strip),
           quantity:        row[@headers.index("Available Qty")].to_i,
-          price:           row[@headers.index('MSRP')].try(:strip),
+          price:           row[@headers.index('Dealer Cost')].try(:strip),
           msrp:            row[@headers.index('MSRP')].try(:strip),
           map_price:       row[@headers.index('MAP Price')].try(:strip),
           brand:           row[@headers.index('Manufacturer')].try(:strip),
