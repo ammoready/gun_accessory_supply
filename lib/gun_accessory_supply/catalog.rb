@@ -1,6 +1,6 @@
 module GunAccessorySupply
   class Catalog < Base
-    
+
     def initialize(options = {})
       requires!(options, :username, :password)
       @options = options
@@ -12,12 +12,12 @@ module GunAccessorySupply
     end
 
     def all
-      tempfile = get_most_recent_file(GunAccessorySupply.config.catalog_filename_prefix, GunAccessorySupply.config.top_level_dir)
+      tempfile = get_most_recent_file(GunAccessorySupply.config.inventory_filename_prefix, 'out')
       items = []
 
       File.open(tempfile).each_with_index do |row, i|
         row = parse_row(row)
-        
+
         if i==0
           @headers = row
           next

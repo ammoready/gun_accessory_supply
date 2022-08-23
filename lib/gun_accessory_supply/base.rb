@@ -3,8 +3,13 @@ module GunAccessorySupply
 
     def self.connect(options = {})
       requires!(options, :username, :password)
-      
-      Net::SFTP.start(GunAccessorySupply.config.ftp_host, options[:username], password: options[:password], port: GunAccessorySupply.config.ftp_port) do |sftp|
+
+      Net::SFTP.start(
+        GunAccessorySupply.config.proxy_host || GunAccessorySupply.config.sftp_host,
+        options[:username],
+        password: options[:password],
+        port: GunAccessorySupply.config.proxy_port || GunAccessorySupply.config.sftp_port
+      ) do |sftp|
         yield(sftp)
       end
     end
@@ -47,12 +52,12 @@ module GunAccessorySupply
         node.content.try(:strip)
       end
     end
-    
+
     def get_file(filename, file_directory=nil)
       connect(@options) do |sftp|
         begin
           tempfile = Tempfile.new
-          
+
           sftp.download!(File.join(file_directory, filename), tempfile.path)
 
           return tempfile
@@ -67,7 +72,7 @@ module GunAccessorySupply
         sftp.dir.foreach(file_directory) { |entry| filenames << entry.name }
         filename = filenames.select{ |n| n.include?(file_prefix) }.sort.last
 
-        tempfile = self.get_file(filename, file_directory) 
+        tempfile = self.get_file(filename, file_directory)
         return tempfile
       end
     end

@@ -32,19 +32,19 @@ module GunAccessorySupply
   end
 
   class Configuration
-    attr_accessor :debug_mode
-    attr_accessor :ftp_host
-    attr_accessor :ftp_port
-    attr_accessor :top_level_dir
-    attr_accessor :catalog_filename_prefix
-    attr_accessor :xml_domain
-    attr_accessor :xml_secret
+    attr_accessor *%i(
+      sftp_host
+      sftp_port
+      inventory_filename_prefix
+      xml_domain
+      xml_secret
+      proxy_host
+      proxy_port
+    )
 
     def initialize
-      @debug_mode    ||= false
-      @ftp_host      ||= "50.233.131.250"
-      @ftp_port      ||= "2222"
-      @top_level_dir ||= "/out"
+      @sftp_host ||= "50.233.131.250"
+      @sftp_port ||= "2222"
     end
   end
 end
