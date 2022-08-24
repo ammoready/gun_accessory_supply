@@ -70,23 +70,23 @@ module GunAccessorySupply
       xml.cXML(timestamp: Time.now) do
         xml.Header do
           xml.From do
-            xml.Credential(domain: @xml_domain) do
-              xml.Identity @xml_domain
-              xml.SharedSecret @xml_secret
+            xml.Credential(domain: GunAccessorySupply.config.xml_domain) do
+              xml.Identity GunAccessorySupply.config.xml_domain
+              xml.SharedSecret GunAccessorySupply.config.xml_secret
               xml.OrderID @po_number
             end
           end
           xml.To do
-            xml.Credential(domain: @xml_domain) do
-              xml.Identity @xml_domain
-              xml.SharedSecret @xml_secret
+            xml.Credential(domain: GunAccessorySupply.config.xml_domain) do
+              xml.Identity GunAccessorySupply.config.xml_domain
+              xml.SharedSecret GunAccessorySupply.config.xml_secret
               xml.OrderID @po_number
             end
           end
           xml.Sender do
-            xml.Credential(domain: @xml_domain) do
-              xml.Identity @xml_domain
-              xml.SharedSecret @xml_secret
+            xml.Credential(domain: GunAccessorySupply.config.xml_domain) do
+              xml.Identity GunAccessorySupply.config.xml_domain
+              xml.SharedSecret GunAccessorySupply.config.xml_secret
               xml.OrderID @po_number
             end
           end

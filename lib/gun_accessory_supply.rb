@@ -1,11 +1,8 @@
 require 'gun_accessory_supply/version'
-
 require 'csv'
 require 'net/sftp'
 require 'tempfile'
-
 require 'active_support/all'
-
 require 'gun_accessory_supply/base'
 require 'gun_accessory_supply/catalog'
 require 'gun_accessory_supply/category'
