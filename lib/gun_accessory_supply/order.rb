@@ -32,7 +32,7 @@ module GunAccessorySupply
     #   * :special_instructions [String] optional
     def add_recipient(hash = {})
       requires!(hash, :dealer_name, :shipping)
-      requires!(hash[:shipping], :name, :address, :city, :state, :zip, :email, :phone)
+      requires!(hash[:shipping], :name, :address, :city, :state, :zip, :email)
 
       @recipient = hash
     end
