@@ -31,7 +31,7 @@ module GunAccessorySupply
         item = {
           item_identifier: row[@headers.index('Item ID')].try(:strip),
           quantity:        row[@headers.index('Available Qty')].to_i,
-          price:           row[@headers.index('MSRP')].try(:strip),
+          price:           row[@headers.index('Dealer Cost')].try(:strip),
         }
 
         items << item
