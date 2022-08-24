@@ -45,13 +45,16 @@ module GunAccessorySupply
     #   * :price [String]
     def add_item(item = {})
       requires!(item, :identifier, :upc, :qty)
+
       @items << item
     end
 
     def filename
-      return @filename if defined?(@filename)
-      timestamp = Time.now.strftime('%Y%m%d%T').gsub(':', '')
-      @filename = "GUN-ACCESSORY-SUPPLY-#{@po_number}-#{timestamp}.xml"
+      @filename ||= begin
+        timestamp = Time.now.strftime('%Y%m%d%T').gsub(':', '')
+
+        "GUN-ACCESSORY-SUPPLY-#{@po_number}-#{timestamp}.xml"
+      end
     end
 
     def submit!
@@ -60,7 +63,6 @@ module GunAccessorySupply
 
     def to_xml
       output = ""
-
       xml = Builder::XmlMarkup.new(target: output, indent: 2)
 
       xml.instruct!(:xml)
