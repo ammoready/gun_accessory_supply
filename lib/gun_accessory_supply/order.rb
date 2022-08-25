@@ -73,28 +73,25 @@ module GunAccessorySupply
             xml.Credential(domain: GunAccessorySupply.config.xml_domain) do
               xml.Identity GunAccessorySupply.config.xml_domain
               xml.SharedSecret GunAccessorySupply.config.xml_secret
-              xml.OrderID @po_number
             end
           end
           xml.To do
             xml.Credential(domain: GunAccessorySupply.config.xml_domain) do
               xml.Identity GunAccessorySupply.config.xml_domain
               xml.SharedSecret GunAccessorySupply.config.xml_secret
-              xml.OrderID @po_number
             end
           end
           xml.Sender do
             xml.Credential(domain: GunAccessorySupply.config.xml_domain) do
               xml.Identity GunAccessorySupply.config.xml_domain
               xml.SharedSecret GunAccessorySupply.config.xml_secret
-              xml.OrderID @po_number
             end
           end
         end
 
         xml.Request do
           xml.OrderRequest do
-            xml.OrderRequestHeader(orderDate: Time.now, type: 'new') do
+            xml.OrderRequestHeader(orderDate: Time.now, type: 'new', orderID: @po_number) do
               xml.ShipTo do
                 xml.Address(addressID: @ship_to_id) do
                   xml.Name @recipient[:dealer_name]
