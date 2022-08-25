@@ -96,7 +96,7 @@ module GunAccessorySupply
           xml.OrderRequest do
             xml.OrderRequestHeader(orderDate: Time.now, type: 'new') do
               xml.ShipTo do
-                xml.Address do
+                xml.Address(addressID: @ship_to_id) do
                   xml.Name @recipient[:dealer_name]
                   xml.Email @recipient[:shipping][:email]
                   xml.PostalAddress do
@@ -110,7 +110,7 @@ module GunAccessorySupply
                 end
               end
               xml.BillTo do
-                xml.Address(addressID: @ship_to_id) do
+                xml.Address do
                   xml.Name @recipient[:dealer_name]
                   xml.Email @recipient[:shipping][:email]
                   xml.PostalAddress do
