@@ -1,5 +1,5 @@
 module GunAccessorySupply
-  class Tracking < Base
+  class PO < Base
 
     def initialize(options = {})
       requires!(options, :username, :password)
@@ -21,10 +21,10 @@ module GunAccessorySupply
 
     def file_names(po_numbers = [])
       filename_regexes = if po_numbers.empty?
-        [/#{GunAccessorySupply.config.tracking_filename_prefix}.*.xml/]
+        [/#{GunAccessorySupply.config.po_filename_prefix}.*.xml/]
       else
         po_numbers.map do |po_number|
-          /#{GunAccessorySupply.config.tracking_filename_prefix}.*#{po_number}.xml/
+          /#{GunAccessorySupply.config.po_filename_prefix}.*#{po_number}.xml/
         end
       end
 

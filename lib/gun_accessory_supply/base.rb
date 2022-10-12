@@ -37,9 +37,7 @@ module GunAccessorySupply
     # Instance methods become class methods through inheritance
     def connect(options)
       self.class.connect(options) do |sftp|
-        begin
-          yield(sftp)
-        end
+        yield(sftp)
       end
     end
 
@@ -53,27 +51,36 @@ module GunAccessorySupply
       end
     end
 
-    def get_file(filename, file_directory=nil)
+    def get_file(filename, file_directory = nil)
       connect(@options) do |sftp|
-        begin
-          tempfile = Tempfile.new
+        tempfile = Tempfile.new
 
-          sftp.download!(File.join(file_directory, filename), tempfile.path)
+        sftp.download!(File.join(file_directory, filename), tempfile.path)
 
-          return tempfile
-        end
+        return tempfile
       end
     end
 
-    def get_most_recent_file(file_prefix, file_directory=nil)
-      filenames = []
-
+    def get_full_filenames(filename_regexes = [], file_directory = nil)
       connect(@options) do |sftp|
-        sftp.dir.foreach(file_directory) { |entry| filenames << entry.name }
-        filename = filenames.select{ |n| n.include?(file_prefix) }.sort.last
+        filenames = sftp.dir.entries(file_directory).map(&:name)
+        full_regex = Regexp.union(*filename_regexes)
 
-        tempfile = self.get_file(filename, file_directory)
-        return tempfile
+        return filenames.select { |filename| filename =~ full_regex }
+      end
+    end
+
+    def get_most_recent_file(file_prefix, file_directory = nil)
+      connect(@options) do |sftp|
+        filename = sftp.
+          dir.
+          entries(file_directory).
+          map(&:name).
+          select { |filename| filename.include?(file_prefix) }.
+          sort.
+          last
+
+        return get_file(filename, file_directory)
       end
     end
 
