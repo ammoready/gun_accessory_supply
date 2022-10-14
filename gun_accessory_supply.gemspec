@@ -6,8 +6,8 @@ require 'gun_accessory_supply/version'
 Gem::Specification.new do |spec|
   spec.name          = "gun_accessory_supply"
   spec.version       = GunAccessorySupply::VERSION
-  spec.authors       = ["Tony Beninate"]
-  spec.email         = ["tonybeninate@icloud.com"]
+  spec.authors       = ["Tony Beninate", "Jeffrey Dill"]
+  spec.email         = ["tonybeninate@icloud.com", "jeffdill2@gmail.com"]
 
   spec.summary       = %q{Ruby library for Gun Accessory Supply}
   spec.description   = %q{}
