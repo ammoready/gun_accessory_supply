@@ -16,7 +16,7 @@ module GunAccessorySupply
     def self.file_data(options = {}, filename)
       requires!(options, :username, :password)
 
-      new(options).download(filename)
+      new(options).file_data(filename)
     end
 
     def file_names(po_numbers = [])
