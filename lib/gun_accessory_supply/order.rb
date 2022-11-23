@@ -128,9 +128,6 @@ module GunAccessorySupply
                   xml.SupplierPartID item[:identifier]
                 end
                 xml.ItemDetail do
-                  xml.UnitPrice do
-                    xml.Money item[:price]
-                  end
                   xml.Description item[:upc]
                 end
               end
