@@ -4,13 +4,21 @@ module GunAccessorySupply
     def self.connect(options = {})
       requires!(options, :username, :password)
 
-      Net::SFTP.start(
-        GunAccessorySupply.config.proxy_host || GunAccessorySupply.config.sftp_host,
-        options[:username],
-        password: options[:password],
-        port: GunAccessorySupply.config.proxy_port || GunAccessorySupply.config.sftp_port
-      ) do |sftp|
-        yield(sftp)
+      begin
+        ssh_connection = Net::SSH.start(
+          GunAccessorySupply.config.proxy_host || GunAccessorySupply.config.sftp_host,
+          options[:username],
+          password: options[:password],
+          port: GunAccessorySupply.config.proxy_port || GunAccessorySupply.config.sftp_port
+        )
+        sftp_session = Net::SFTP::Session.new(ssh_connection)
+
+        sftp_session.connect!
+
+        yield(sftp_session)
+      ensure
+        sftp_session&.close_channel
+        ssh_connection&.close
       end
     end
 
